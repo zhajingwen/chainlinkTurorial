@@ -12,11 +12,12 @@ import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interf
 contract FundMe {
     mapping(address => uint256) public funderAmount;
 
-    // 相当于100美元，后面的是价格精度的概念（由于solidity中不能用小数表示）
-    uint256 constant MINIUM_VALUE = 1 * 10 **18;
+    // 相当于1美元，后面的是价格精度的概念（由于solidity中不能用小数表示）
+    // uint256 constant MINIUM_VALUE = 1 * 10 **18;
+    uint256 constant MINIUM_VALUE = 1 **16;
 
     AggregatorV3Interface internal dataFeed;
-    // 美元计价 1000美元
+    // 美元计价 1美元
     uint256 constant TARGET_AMOUNNT = 1 * 10 ** 18;
 
     address public owner;
