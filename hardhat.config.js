@@ -1,5 +1,6 @@
 require("@nomicfoundation/hardhat-toolbox");
 require("@chainlink/env-enc").config()
+require("./tasks")
 
 const INFURA_KEY = process.env.INFURA_KEY
 const PRIVATE_KEY = process.env.PRIVATE_KEY
