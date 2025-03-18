@@ -31,9 +31,9 @@ contract FundMe {
     bool public getFundSuccess = false;
 
     // 构造函数，只在合约部署的时候启动一次
-    constructor(uint256 _blockTime) payable {
+    constructor(uint256 _blockTime, address dataFeedAddr) payable {
         dataFeed = AggregatorV3Interface(
-            0x694AA1769357215DE4FAC081bf1f309aDC325306
+            dataFeedAddr
         );
         owner = msg.sender;
         deploymentTimestamp = block.timestamp;
