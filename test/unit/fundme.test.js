@@ -90,10 +90,23 @@ describe("this is a fundme test script", async function () {
         await helper.time.increase(70*60)
         await FundMeObj.refund()
         const amout = await FundMeObj.funderAmount(firstAccount)
-        // console.log(`amout is ${amout}`)
         assert.equal(amout, 0)
-        // await expect().to.be.revertedWith("You no fund any more!")
     })
 
+    it("test getFund the amout is smaller than 1000USD", async function () {
+        await FundMeObj.fund({value: ethers.parseEther("0.1")})
+        await helper.time.increase(70*60)
+        await expect(FundMeObj.getFund()).to.be.revertedWith("Fund Amount Must Be Greater Than 1000 USD")
+        // const amout = await FundMeObj.funderAmount(firstAccount)
+        // assert.equal(amout, 0)
+    })
+
+    it("test getFund successfully", async function () {
+        await FundMeObj.fund({value: ethers.parseEther("1")})
+        await helper.time.increase(70*60)
+        await FundMeObj.getFund()
+        const getFundSuccess = await FundMeObj.getFundSuccess()
+        assert.equal(getFundSuccess, true)
+    })
 
 })
