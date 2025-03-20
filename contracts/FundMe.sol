@@ -30,6 +30,8 @@ contract FundMe {
 
     bool public getFundSuccess = false;
 
+    event fundWithdrawByOwner(uint256);
+
     // 构造函数，只在合约部署的时候启动一次
     constructor(uint256 _blockTime, address dataFeedAddr) payable {
         dataFeed = AggregatorV3Interface(
@@ -104,8 +106,9 @@ contract FundMe {
         // require(block.timestamp > deploymentTimestamp + blockTime, "Time is not reached");
         // 从chainlink data feed 获取ETH的价格数据（精度：10**8）
         int price = getChainLinkDataFeedLatestAnswer();
+        uint256 balance = address(this).balance;
         // 将当前合约的balance 转换成USD计价的单位，精度10**18
-        uint256 balanceInUSD = convertETHToUSD(address(this).balance, price);
+        uint256 balanceInUSD = convertETHToUSD(balance, price);
         // 提款的限制条件
         require(balanceInUSD >= TARGET_AMOUNNT, "Fund Amount Must Be Greater Than 1000 USD");
         // require(msg.sender == owner, "You must be the onwer!");
@@ -113,6 +116,7 @@ contract FundMe {
         // bool successStatus = payable(msg.sender).send(address(this).balance);
         require(success, "Tx failed!");
         getFundSuccess = success;
+        emit fundWithdrawByOwner(balance);
         // payable (owner).transfer(address(this).balance);
         // return (msg.sender, amountInUSD);
     }

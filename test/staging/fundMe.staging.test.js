@@ -21,4 +21,20 @@ describe("this is a fundme test script", async function () {
         FundMeObj = await ethers.getContractAt("FundMe", fundmeAddr)
     })
 
+    it("test fund and getFund function successfully", async function () {
+        // let firstAccountAmount = await FundMeObj.funderAmount(firstAccount)
+        // console.log(`firstAccountAmount is ${firstAccountAmount}`)
+        await FundMeObj.fund({value: ethers.parseEther("1")})
+        helper.time.increase(70*60)
+        const tx = await FundMeObj.getFund()
+        expect(tx).to.be.emit(FundMeObj, "FundWithdrawByOwner").withArgs(ethers.parseEther("1"))
+    })
+
+    it("test fund and refund function successfully", async function () {
+        await FundMeObj.fund({value: ethers.parseEther("1")})
+        helper.time.increase(70*60)
+        const tx = await FundMeObj.getFund()
+        expect(tx).to.be.emit(FundMeObj, "FundWithdrawByOwner").withArgs(ethers.parseEther("1"))
+    })
+
 })
