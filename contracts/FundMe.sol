@@ -31,6 +31,7 @@ contract FundMe {
     bool public getFundSuccess = false;
 
     event fundWithdrawByOwner(uint256);
+    event refundToFunder(uint256);
 
     // 构造函数，只在合约部署的时候启动一次
     constructor(uint256 _blockTime, address dataFeedAddr) payable {
@@ -134,6 +135,7 @@ contract FundMe {
         require(success, "Tx failed!");
         // 重置用户的余额数据
         funderAmount[msg.sender] = 0;
+        emit refundToFunder(funderAmount[msg.sender]);
     }
 
     // 修饰符

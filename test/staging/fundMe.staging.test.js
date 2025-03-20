@@ -31,10 +31,10 @@ describe("this is a fundme test script", async function () {
     })
 
     it("test fund and refund function successfully", async function () {
-        await FundMeObj.fund({value: ethers.parseEther("1")})
+        await FundMeObj.fund({value: ethers.parseEther("0.1")})
         helper.time.increase(70*60)
-        const tx = await FundMeObj.getFund()
-        expect(tx).to.be.emit(FundMeObj, "FundWithdrawByOwner").withArgs(ethers.parseEther("1"))
+        const tx = await FundMeObj.refund()
+        expect(tx).to.be.emit(FundMeObj, "refundToFunder").withArgs(ethers.parseEther("0.1"))
     })
 
 })
