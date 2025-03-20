@@ -13,12 +13,12 @@ contract FundMe {
     mapping(address => uint256) public funderAmount;
 
     // 相当于1美元，后面的是价格精度的概念（由于solidity中不能用小数表示）
-    // uint256 constant MINIUM_VALUE = 1 * 10 **18;
-    uint256 constant MINIUM_VALUE = 1 **16;
+    uint256 constant MINIUM_VALUE = 100 * 10 **18;
+    // uint256 constant MINIUM_VALUE = 1 **16;
 
     AggregatorV3Interface internal dataFeed;
-    // 美元计价 1美元
-    uint256 constant TARGET_AMOUNNT = 1 * 10 ** 18;
+    // 美元计价 1000美元
+    uint256 constant TARGET_AMOUNNT = 1000 * 10 ** 18;
 
     address public owner;
 
@@ -48,8 +48,6 @@ contract FundMe {
         require(block.timestamp < deploymentTimestamp + blockTime, "Expired!");
 
         require(amountInUSD > MINIUM_VALUE, "Fund Amount Must be Greater Than 1 USD!");
-        // require(amountInUSD > MINIUM_VALUE, "Fund Amount Must be Greater Than 1 USD!");
-
 
         if (funderAmount[msg.sender] > 0) {
             funderAmount[msg.sender] += msg.value;
@@ -121,7 +119,6 @@ contract FundMe {
 
     // 投资人退款
     function refund() external winowClosed{
-        // require(block.timestamp > deploymentTimestamp + blockTime, "Time is not reached!");
         // 从chainlink data feed 获取ETH的价格数据（精度：10**8）
         int price = getChainLinkDataFeedLatestAnswer();
         // 将当前合约的balance 转换成USD计价的单位，精度10**18
