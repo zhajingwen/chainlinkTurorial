@@ -71,24 +71,28 @@ describe("this is a fundme test script", async function () {
     })
 
     it("test  refund to funder winowClosed failed", async function () {
-        // await helper.time.increase(70*60)
         await expect(FundMeObj.refund()).to.be.revertedWith("Time is not reached!")
     })
         
     it("test  refund to funder failed due to Target is reached", async function () {
-        // await helper.time.increase(70*60)
         await FundMeObj.fund({value: ethers.parseEther("1")})
         await helper.time.increase(70*60)
-        // await FundMeObj.refund()
         await expect(FundMeObj.refund()).to.be.revertedWith("Target is reached")
     })
 
     it("test  refund to funder failed due to You no fund any more!", async function () {
-        // await helper.time.increase(70*60)
-        // await FundMeObj.fund({value: ethers.parseEther("1")})
         await helper.time.increase(70*60)
-        // await FundMeObj.refund()
         await expect(FundMeObj.refund()).to.be.revertedWith("You no fund any more!")
+    })
+
+    it("test refund to funder after the amout in mapping", async function () {
+        await FundMeObj.fund({value: ethers.parseEther("0.1")})
+        await helper.time.increase(70*60)
+        await FundMeObj.refund()
+        const amout = await FundMeObj.funderAmount(firstAccount)
+        // console.log(`amout is ${amout}`)
+        assert.equal(amout, 0)
+        // await expect().to.be.revertedWith("You no fund any more!")
     })
 
 
